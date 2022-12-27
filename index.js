@@ -19,7 +19,7 @@ async function run() {
         const appointmentOptionCollection = client.db('BestCareDatabase').collection('AppointmentOptions');
         const bookingCollection = client.db('BestCareDatabase').collection('Bookings');
         // 🌼Appointment Options
-        // Get Appointment Options From Database
+        // 🍒Get Appointment Options From Database
         app.get('/appointmentOptions', async (req, res) => {
             const query = {};
             const appointmentOptions = await appointmentOptionCollection.find(query).toArray();
@@ -42,7 +42,7 @@ async function run() {
             res.send(appointmentOptions);
         });
         // 🌼Bookings
-        // Post Bookings To Database
+        // 🍒Post Bookings To Database
         app.post('/bookings', async (req, res) => {
             const booking = req.body;
             // ✂️ Bookings Query By Same Date Email & Treatment
@@ -59,6 +59,13 @@ async function run() {
             // Post Bookings To Database
             const result = await bookingCollection.insertOne(booking);
             res.send(result);
+        });
+        // 🍒Get Booking By Email
+        app.get('/bookings', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const bookings = await bookingCollection.find(query).toArray();
+            res.send(bookings);
         });
 
     }
