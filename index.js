@@ -18,6 +18,7 @@ async function run() {
         // Database & Collections
         const appointmentOptionCollection = client.db('BestCareDatabase').collection('AppointmentOptions');
         const bookingCollection = client.db('BestCareDatabase').collection('Bookings');
+        const userCollection = client.db('BestCareDatabase').collection('Users');
         // 🌼Appointment Options
         // 🍒Get Appointment Options From Database
         app.get('/appointmentOptions', async (req, res) => {
@@ -67,7 +68,18 @@ async function run() {
             const bookings = await bookingCollection.find(query).toArray();
             res.send(bookings);
         });
-
+        // 🌼Users
+        // 🍒Post Users To Database
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const query = { email: user?.email };
+            const signUpUsers = await userCollection.find(query).toArray();
+            if (signUpUsers.length) {
+                return res.send({ acknowledged: false });
+            }
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        });
     }
     finally { }
 }
